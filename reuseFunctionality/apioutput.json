@@ -57,7 +57,7 @@
                         "85b9b22e-1b0a-4a9b-81a9-83952d27271a": {
                             "id": "85b9b22e-1b0a-4a9b-81a9-83952d27271a",
                             "Concept": "User Question",
-                            "Instance": "User Question",
+                            "Instance": "What is the impact of feature X on the outcome?",
                             "description": "",
                             "properties": {},
                             "display": {
