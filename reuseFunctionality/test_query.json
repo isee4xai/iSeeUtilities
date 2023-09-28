@@ -1,0 +1,199 @@
+{
+    "_id": "646746fb85df4c5223ebfd18",
+    "name": "Tree",
+    "description": "",
+    "path": "b3projects-be43ff4e-5c19-4ae9-a2c8-4524012b7f05",
+    "data": {
+        "version": "0.1.0",
+        "scope": "project",
+        "selectedTree": "33def3ec-31a8-47c1-856c-7fd724718df2",
+        "trees": [
+            {
+                "version": "0.1.0",
+                "scope": "tree",
+                "id": "33def3ec-31a8-47c1-856c-7fd724718df2",
+                "Instance": "Explanation Experience",
+                "description": "",
+                "root": "5112868d-f790-4665-ab3e-18a36a857363",
+                "query": "[ 0.79567475,  0.9502404 ,  1.1466679 ,  1.7491252 ,  2.4258016 ,\\n        2.6709641 ,  2.4624665 ,  2.0670781 ,  1.6233579 ,  1.088265  ,\\n        0.48325747,  0.02906767, -0.10205782, -0.04598573, -0.0671826 ,\\n       -0.19722394, -0.2485563 , -0.16774872, -0.14832422, -0.28560195,\\n       -0.40439817, -0.44400887, -0.57232183, -0.74243746, -0.76085833,\\n       -0.73913887, -0.79702819, -0.82658122, -0.86103224, -0.92441019,\\n       -0.92853065, -1.0558294 , -1.342795  , -1.4240432 , -1.3925323 ,\\n       -1.6146891 , -1.8213559 , -1.7714491 , -1.812784  , -2.0056145 ,\\n       -1.9994011 , -1.8152135 , -1.7312891 , -1.7231695 , -1.595469  ,\\n       -1.3787969 , -1.2431864 , -1.1277632 , -0.82712383, -0.43367487,\\n       -0.24352558, -0.24418688, -0.13786127,  0.12819149,  0.28449563,\\n        0.27788564,  0.34869189,  0.47325956,  0.46019376,  0.43604088,\\n        0.46587407,  0.36677829,  0.29225774,  0.45376562,  0.5617359 ,\\n        0.44966833,  0.36502024,  0.37485964,  0.38958319,  0.43390585,\\n        0.45581797,  0.40363272,  0.39960026,  0.49559394,  0.56183973,\\n        0.54000099,  0.5069879 ,  0.48365207,  0.46294595,  0.5407128 ,\\n        0.71064026,  0.7848302 ,  0.74619101,  0.73161313,  0.68733161,\\n        0.53590909,  0.43032121,  0.48710724,  0.57974138,  0.56283371,\\n        0.46409311,  0.40246792,  0.44930481,  0.55808223,  0.56857857,\\n        0.40117688]",
+                "idModel": "ECG200LSTM",
+                "nodes": {
+                    "5112868d-f790-4665-ab3e-18a36a857363": {
+                        "id": "5112868d-f790-4665-ab3e-18a36a857363",
+                        "Concept": "Sequence",
+                        "Instance": "Sequence",
+                        "description": "",
+                        "display": {
+                            "x": -60,
+                            "y": 168
+                        },
+                        "firstChild": {
+                            "Id": "8c7af98f-dc9b-40fc-b17c-794527bd4872",
+                            "Next": {
+                                "Id": "2840a90d-18bf-41b0-b354-7d36f37509e6",
+                                "Next": null
+                            }
+                        }
+                    },
+                    "8c7af98f-dc9b-40fc-b17c-794527bd4872": {
+                        "id": "8c7af98f-dc9b-40fc-b17c-794527bd4872",
+                        "Concept": "Explanation Method",
+                        "Instance": "/Timeseries/LIMESegment",
+                        "description": "",
+                        "properties": {
+                            "Popularity": 0,
+                            "Applicability": false
+                        },
+                        "display": {
+                            "x": -336,
+                            "y": 228
+                        },
+                        "params": {
+                            "distance": {
+                                "key": "distance",
+                                "value": "dtw",
+                                "default": "dtw",
+                                "range": [
+                                    "dtw",
+                                    "euclidean"
+                                ],
+                                "required": "false",
+                                "description": "Distance metric to be used. Defaults to 'dtw'.",
+                                "type": "select"
+                            },
+                            "window_size": {
+                                "key": "window_size",
+                                "value": 19,
+                                "default": 19,
+                                "range": [
+                                    3,
+                                    48
+                                ],
+                                "required": "false",
+                                "description": "Window size to be used by the segmentation algorithm. Default is T/5 (T = series length).",
+                                "type": "number"
+                            },
+                            "change_points": {
+                                "key": "change_points",
+                                "value": 3,
+                                "default": 3,
+                                "range": [
+                                    1,
+                                    96
+                                ],
+                                "required": "false",
+                                "description": "Number of change points to be determined by the segmentation algorithm. Default is 3.",
+                                "type": "number"
+                            }
+                        }
+                    },
+                    "2840a90d-18bf-41b0-b354-7d36f37509e6": {
+                        "id": "2840a90d-18bf-41b0-b354-7d36f37509e6",
+                        "Concept": "Explanation Method",
+                        "Instance": "/Timeseries/LEFTIST",
+                        "description": "",
+                        "properties": {
+                            "Popularity": 2,
+                            "Applicability": true
+                        },
+                        "display": {
+                            "x": 132,
+                            "y": 228
+                        },
+                        "params": {
+                            "target_class": {
+                                "key": "target_class",
+                                "value": "Highest Pred.",
+                                "default": "Highest Pred.",
+                                "range": [
+                                    "Highest Pred.",
+                                    "Normal Heartbeat",
+                                    "Myocardial Infarction"
+                                ],
+                                "required": "false",
+                                "description": "String denoting the desired class for the computation of the attributions. Ignore for regression models. Defaults to the predicted class of the instance.",
+                                "type": "select"
+                            },
+                            "method": {
+                                "key": "method",
+                                "value": "gausslegendre",
+                                "default": "gausslegendre",
+                                "range": [
+                                    "gausslegendre",
+                                    "riemann_left",
+                                    "riemann_right",
+                                    "riemann_middle",
+                                    "riemann_trapezoid"
+                                ],
+                                "required": "false",
+                                "description": "Method for the integral approximation. The methods available are: 'riemann_left', 'riemann_right', 'riemann_middle', 'riemann_trapezoid', 'gausslegendre'. Defaults to 'gausslegendre'.",
+                                "type": "select"
+                            },
+                            "n_steps": {
+                                "key": "n_steps",
+                                "value": 10,
+                                "default": 10,
+                                "range": [
+                                    null,
+                                    null
+                                ],
+                                "required": "false",
+                                "description": "Number of step in the path integral approximation from the baseline to the input instance. Defaults to 10.",
+                                "type": "number"
+                            },
+                            "internal_batch_size": {
+                                "key": "internal_batch_size",
+                                "value": 100,
+                                "default": 100,
+                                "range": [
+                                    null,
+                                    null
+                                ],
+                                "required": "false",
+                                "description": "Batch size for the internal batching. Defaults to 100.",
+                                "type": "number"
+                            },
+                            "png_width": {
+                                "key": "png_width",
+                                "value": 1200,
+                                "default": 1200,
+                                "range": [
+                                    null,
+                                    null
+                                ],
+                                "required": "false",
+                                "description": "Width (in pixels) of the png image containing the explanation.",
+                                "type": "number"
+                            },
+                            "png_height": {
+                                "key": "png_height",
+                                "value": 600,
+                                "default": 600,
+                                "range": [
+                                    null,
+                                    null
+                                ],
+                                "required": "false",
+                                "description": "Height (in pixels) of the png image containing the explanation.",
+                                "type": "number"
+                            }
+                        }
+                    }
+                },
+                "display": {
+                    "camera_x": 821.0999999642372,
+                    "camera_y": 332.69999998807907,
+                    "camera_z": 1,
+                    "x": -60,
+                    "y": 0
+                }
+            }
+        ],
+        "custom_nodes": []
+    },
+    "createdAt": "2023-05-19T09:52:59.613Z",
+    "updatedAt": "2023-09-27T12:15:51.303Z",
+    "__v": 0,
+    "id": "646746fb85df4c5223ebfd18",
+    "date": "2023-9-27 14:15:51"
+}
