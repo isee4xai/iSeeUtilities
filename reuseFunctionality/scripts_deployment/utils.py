@@ -228,3 +228,50 @@ def gettingExplainerProperties():
     """
     df_fo = pd.read_csv(PROPERTIES_FILE, delimiter=',')
     return df_fo
+
+
+def updateDict(my_dict):
+    my_dict["explainer"] = my_dict.pop("Explainer")
+    my_dict["technique"] = my_dict.pop("ExplainabilityTechniqueType")
+    my_dict.pop("ExplainerDescription")
+    my_dict["dataset_type"] = my_dict.pop("DatasetType")
+    my_dict["explanation_type"] = my_dict.pop("ExplanationOutputType")
+    my_dict.pop("ExplanationDescription")
+    my_dict["concurrentness"] = my_dict.pop("Concurrentness")
+    my_dict["portability"] = my_dict.pop("Portability")
+    my_dict["scope"] = my_dict.pop("Scope")
+    my_dict["target"] = my_dict.pop("TargetType")
+    my_dict["presentations"] = my_dict.pop("OutputType")
+    my_dict["computational_complexity"] = my_dict.pop("Complexity")
+    my_dict["ai_methods"] = my_dict.pop("AIMethodType")
+    my_dict["ai_tasks"] = my_dict.pop("AITaskType")
+    my_dict["implementation"] = my_dict.pop("Backend")
+    my_dict.pop("metadata")
+    return my_dict   
+
+
+   
+def getPropertiesFormat():
+    properties = gettingExplainerProperties().to_dict(orient='records')
+    data_dict = {item['Explainer']: item for item in properties}
+    prop_dict = {x[0]: updateDict(x[1]) for x in data_dict.items()}
+    return prop_dict
+
+
+## Filter the explainers and their property values
+def filter_properties(properties_dict, filter_properties_dict):
+    for explainer, properties in properties_dict.items():
+        for prop, prop_value in properties.items(): 
+            # if isinstance(prop_value, list): # isinstance() check is performed to identify if the value is a list. 
+            if prop_value[1] == "[":
+                property_tmp_x = prop_value[:-2].replace('[','').split('], ')
+                property_tmp = [list(x.replace("'","").split(', ')) for x in property_tmp_x]
+                property_flatten = [x for y in property_tmp for x in y]
+                filter_properties_dict.setdefault(prop, set()).update(property_flatten)
+            elif prop_value[0] == "[":
+                property_tmp = prop_value.replace('[','').replace(']','').replace("'","").split(', ')
+                filter_properties_dict.setdefault(prop, set()).update(property_tmp) # update() method is used to add all elements of the list to the set       
+            else:
+                filter_properties_dict.setdefault(prop, set()).add(prop_value)
+
+    return filter_properties_dict
