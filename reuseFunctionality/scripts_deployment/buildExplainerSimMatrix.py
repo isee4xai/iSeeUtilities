@@ -104,10 +104,10 @@ def apply_common_attributes(explainer1, explainer2):
     count = 0
     if explainer1[PROPERTIES['Explainer']] == explainer2[PROPERTIES['Explainer']]: # if the explainer is the same
         return 1
-    elif explainer1[PROPERTIES['ExplainabilityTechniqueType']] == explainer2[PROPERTIES['ExplainabilityTechniqueType']]: # if the explainability technique is the same
-        return 0.9
     elif explainer1[PROPERTIES['DatasetType']] != explainer2[PROPERTIES['DatasetType']]:
         return count
+    elif explainer1[PROPERTIES['ExplainabilityTechniqueType']] == explainer2[PROPERTIES['ExplainabilityTechniqueType']]: # if the explainability technique is the same
+        return 0.9
     else:
         i = 2
         while i < len(explainer1):
@@ -125,10 +125,10 @@ def apply_weighted_ca(explainer1, explainer2):
     count = 0
     if explainer1[PROPERTIES['Explainer']] == explainer2[PROPERTIES['Explainer']]:
         return 1
-    elif explainer1[PROPERTIES['ExplainabilityTechniqueType']] == explainer2[PROPERTIES['ExplainabilityTechniqueType']]: # if the explainability technique is the same
-        return 0.9
     elif explainer1[PROPERTIES['DatasetType']] != explainer2[PROPERTIES['DatasetType']]:
-        return count    
+        return count
+    elif explainer1[PROPERTIES['ExplainabilityTechniqueType']] == explainer2[PROPERTIES['ExplainabilityTechniqueType']]: # if the explainability technique is the same
+        return 0.9  
     else:
         i = 2
         while i < len(explainer1):
@@ -200,10 +200,10 @@ def appy_measure_parents(explainer1, explainer2, measure):
     count = 0
     if explainer1[PROPERTIES['Explainer']] == explainer2[PROPERTIES['Explainer']]:
         return 1
-    elif explainer1[PROPERTIES['ExplainabilityTechniqueType']] == explainer2[PROPERTIES['ExplainabilityTechniqueType']]: # if the explainability technique is the same
-        return 0.9
     elif explainer1[PROPERTIES['DatasetType']] != explainer2[PROPERTIES['DatasetType']]:
         return count
+    elif explainer1[PROPERTIES['ExplainabilityTechniqueType']] == explainer2[PROPERTIES['ExplainabilityTechniqueType']]: # if the explainability technique is the same
+        return 0.9
     else:
         i = 2
         while i < len(explainer1):
