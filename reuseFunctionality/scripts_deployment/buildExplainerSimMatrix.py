@@ -227,8 +227,8 @@ def appy_measure_parents(explainer1, explainer2, measure):
                     union_props_tmp = union_props_tmp + explainer1_tmp
                     union_props = len(union_props_tmp)
 
-                if common_props != 0:
-                    count = count + (PROP_WEIGHT[i] * (common_props/union_props))
+                    if common_props != 0:
+                        count = count + (PROP_WEIGHT[i] * (common_props/union_props))
             elif i in COMPLEX_MULT_PROPERTIES:
                 # transform the string in a list and for each value, do the same we have in complex properties
                 explainer1_tmp_x = explainer1[i][:-2].replace('[','').split('], ')
