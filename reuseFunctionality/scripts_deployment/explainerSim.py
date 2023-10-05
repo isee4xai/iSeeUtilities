@@ -13,8 +13,12 @@ def getMostSimilarExplainer(case_id,access_token,explainer,k,property_critiques)
         
         getMostSimilarExplainer(explainer,k,critiques) - explainer should be a string, k an integer with the number of most similar explainer wanted. It returns the list in descending order (the most similar ones first). Critiques is the paremeter to include the critiques included by the user. If they dont include critiques, that should be {}. If they icnlude critiques, they have to include all the explainer properties in the dict, in this format: 
             
-            example1 = {'technique': [], 'dataset_type': '', 'explanation_type': [], 'concurrentness': [], 'scope': [], 'portability': [], 'target': [], 'presentations': [], 'computational_complexity': [], 'ai_methods': [], 'ai_tasks': [], 'implementation': []}
-            It is important to note that in the lists, we have to put the names of the properties
+        example1 = {'explainer': ["/Tabular/LIME"], 'technique': [], 'dataset_type': [], 
+        'explanation_type': ["Statistical Explanation"], 'concurrentness': [], 'scope': [""], 
+        'portability': [], 'target': ['Model'], 'presentations': [], 'computational_complexity': [], 
+        'ai_methods': [], 'ai_tasks': [], 'implementation': ['Any']} 
+         
+         It is important to note that in the lists, we have to put the names of the properties
     """
     matrix = pd.read_csv(SIMILARITIES_FILE, delimiter=',').set_index('explainer')
     
@@ -55,18 +59,22 @@ def getExplainerCritiques(property_critiques):
         Function to get only the explainers that share the critiques indicated by the design user
         Example of how the property_critiques format should be:
         
-        example1 = {'technique': [], 'dataset_type': 'Multivariate', 'explanation_type': ["Counterfactual Explanation"], 
-        'concurrentness': [], 'scope': [], 'portability': [], 'target': ['Prediction'], 'presentations': [], 
-        'computational_complexity': [], 'ai_methods': [], 'ai_tasks': [], 'implementation': ['Any']}
+        example1 = {'explainer': ["/Tabular/LIME"], 'technique': [], 'dataset_type': [], 
+        'explanation_type': ["Statistical Explanation"], 'concurrentness': [], 'scope': [""], 
+        'portability': [], 'target': ['Model'], 'presentations': [], 'computational_complexity': [], 
+        'ai_methods': [], 'ai_tasks': [], 'implementation': ['Any']}
         
-        when a specific property is empty the value must be [] or [""]
-        If the user does not include any property, the property_critiques should be {}
+        when a specific property is empty the value must be [] or [""], for all the properties (all the properties 
+        should be lists thanks to the checkboxes)
+        If the user does not include any property at all, the property_critiques should be {}
     """
     
     explainers = getPropertiesFormat()
     my_explainers = list()
     for e, value in explainers.items():
-        if value["dataset_type"] == property_critiques["dataset_type"]:
+        # to check the user hast included the dataset type
+        # here we are not taking into account the dataset type (that has to be check with checkappicability later)
+        if property_critiques["dataset_type"] == [] or property_critiques["dataset_type"] == [""]:
             if compareListProperties(value, property_critiques):
                 my_explainers.append(e)
         
@@ -80,9 +88,12 @@ def compareListProperties(e1, e2):
         e2 is the critique - then, if the properties in e2 are in e1, we can get the explainer
     """
     explainersEquals = False
+    if e1["explainer"] in e2["explainer"]:
+        explainersEquals = True
+    elif critiqueIsInExplainer(e2["technique"], e1["technique"]) and critiqueIsInExplainer(e2["explanation_type"], e1["explanation_type"]) and compareSimpleProperties(e2["concurrentness"], e1["concurrentness"]) and compareSimpleProperties(e2["portability"], e1["portability"]) and compareSimpleProperties(e2["scope"], e1["scope"]) and compareSimpleProperties(e2["target"], e1["target"]) and compareSimpleProperties(e2["computational_complexity"], e1["computational_complexity"]) and critiqueIsInExplainer(e2["presentations"], e1["presentations"]) and critiqueIsInExplainer(e2["ai_methods"], e1["ai_methods"]) and critiqueIsInExplainer(e2["ai_tasks"], e1["ai_tasks"]) and critiqueIsInExplainer(e2["implementation"], e1["implementation"]):
+        explainersEquals = True
     
-    if critiqueIsInExplainer(e2["technique"], e1["technique"]) and critiqueIsInExplainer(e2["explanation_type"], e1["explanation_type"]) and critiqueIsInExplainer(e2["concurrentness"], e1["concurrentness"]) and critiqueIsInExplainer(e2["portability"], e1["portability"]) and critiqueIsInExplainer(e2["scope"], e1["scope"]) and critiqueIsInExplainer(e2["target"], e1["target"]) and critiqueIsInExplainer(e2["computational_complexity"], e1["computational_complexity"]) and critiqueIsInExplainer(e2["presentations"], e1["presentations"]) and critiqueIsInExplainer(e2["ai_methods"], e1["ai_methods"]) and critiqueIsInExplainer(e2["ai_tasks"], e1["ai_tasks"]) and critiqueIsInExplainer(e2["implementation"], e1["implementation"]):
-        return True
+    return explainersEquals
 
 def critiqueIsInExplainer(critiques, properties_explainer):
     # If the property list is empty (or any for implementation), that explainer can be still on the list
@@ -94,3 +105,14 @@ def critiqueIsInExplainer(critiques, properties_explainer):
             return True
         else:
             return False
+            
+            
+def compareSimpleProperties(critiques, properties_explainer):
+    """
+        Function to know if two explainers share properties (plain)
+        in this case critiques is a list, but properties_explainer is a string
+    """
+    explainersEquals = False
+    if properties_explainer in critiques or critiques == [] or critiques == [""]: 
+        explainersEquals = True
+    return explainersEquals
