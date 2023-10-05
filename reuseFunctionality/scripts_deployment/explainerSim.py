@@ -49,18 +49,13 @@ def getExplainerCritiques(property_critiques):
     """
         Function to get only the explainers that share the critiques indicated by the design user
     """
-    # get all the properties for all the explainers
-    url = "https://api-onto-dev.isee4xai.com/api/explainers/list"
-    payload={}
-    headers = {}
-    response = requests.request("GET", url, headers=headers, data=payload)
-    explainers = json.loads(response.text)
     
+    explainers = getPropertiesFormat()
     my_explainers = list()
-    for e in explainers:
-        if e["dataset_type"] == property_critiques["dataset_type"]:
-            if compareListProperties(e, property_critiques):
-                my_explainers.append(e["name"])
+    for e, value in explainers.items():
+        if value["dataset_type"] == property_critiques["dataset_type"]:
+            if compareListProperties(value, property_critiques):
+                my_explainers.append(e)
         
     
     # get only the explainers that includes the critiques (from PROPERTIES_FILE)
@@ -72,12 +67,13 @@ def compareListProperties(e1, e2):
         e2 is the critique - then, if the properties in e2 are in e1, we can get the explainer
     """
     explainersEquals = False
+    
     if critiqueIsInExplainer(e2["technique"], e1["technique"]) and critiqueIsInExplainer(e2["explanation_type"], e1["explanation_type"]) and critiqueIsInExplainer(e2["concurrentness"], e1["concurrentness"]) and critiqueIsInExplainer(e2["portability"], e1["portability"]) and critiqueIsInExplainer(e2["scope"], e1["scope"]) and critiqueIsInExplainer(e2["target"], e1["target"]) and critiqueIsInExplainer(e2["computational_complexity"], e1["computational_complexity"]) and critiqueIsInExplainer(e2["presentations"], e1["presentations"]) and critiqueIsInExplainer(e2["ai_methods"], e1["ai_methods"]) and critiqueIsInExplainer(e2["ai_tasks"], e1["ai_tasks"]) and critiqueIsInExplainer(e2["implementation"], e1["implementation"]):
         return True
 
 def critiqueIsInExplainer(critiques, properties_explainer):
     # If the property list is empty (or any for implementation), that explainer can be still on the list
-    if critiques == [] or critiques == ['http://www.w3id.org/iSeeOnto/explainer#Any']:
+    if critiques == [] or critiques == [""] or properties_explainer == ['Any'] or critiques == ['Any']:
         return True
     else:
         my_shared_elems = [x for x in critiques if x in properties_explainer]
