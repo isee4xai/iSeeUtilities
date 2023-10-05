@@ -7,10 +7,14 @@ PROPERTIES_FILE="properties.csv"
 SIMILARITIES_FILE="similarities.csv"
 
 
-
 def getMostSimilarExplainer(case_id,access_token,explainer,k,property_critiques):
     """
         getting the k most similar explainer together with their similarity values
+        
+        getMostSimilarExplainer(explainer,k,critiques) - explainer should be a string, k an integer with the number of most similar explainer wanted. It returns the list in descending order (the most similar ones first). Critiques is the paremeter to include the critiques included by the user. If they dont include critiques, that should be {}. If they icnlude critiques, they have to include all the explainer properties in the dict, in this format: 
+            
+            example1 = {'technique': [], 'dataset_type': '', 'explanation_type': [], 'concurrentness': [], 'scope': [], 'portability': [], 'target': [], 'presentations': [], 'computational_complexity': [], 'ai_methods': [], 'ai_tasks': [], 'implementation': []}
+            It is important to note that in the lists, we have to put the names of the properties
     """
     matrix = pd.read_csv(SIMILARITIES_FILE, delimiter=',').set_index('explainer')
     
@@ -35,7 +39,8 @@ def getMostSimilarExplainer(case_id,access_token,explainer,k,property_critiques)
 
 def getMostSimilarExplainerJSON(case_id,access_token,explainer,k,property_critiques={}):
     """
-        Transforming it in json format
+        Transforming it in json format. 
+        getMostSimilarExplainerJSON(explainer,k,critiques) - It does the same than the previous one, but returning the result in json format {similar_explainer: sim_value}. Critiques is the same than before, but in this case, the parameter could not be inclided, because by default is {}
     """
     result = dict()
     
