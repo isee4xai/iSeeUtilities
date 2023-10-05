@@ -5,7 +5,7 @@ from utils import filter_properties
 
 def get_all_properties_from_current_explainer(explainer):
     """
-        This function returns the properties of the current explainer.
+        This function returns the properties of the current explainer (string format).
         Petyo should use this function on the form shown to include the criteria explainers when the 
         explainer reuse. The properties returned by this function have to be clicked in the form.
     """

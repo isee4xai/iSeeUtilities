@@ -123,7 +123,6 @@ def build_adjacency_list(node_list, parent_child_dict):
 
 # function to translate the case solution to graph structure 
 # This function must work for all the cases and the query 
-# TODO
 def translateCasesFromJSONtoGraph(case):
     
     tree_dict, nodes_dict, parent_child_dict = {},{},{}
@@ -260,18 +259,6 @@ def get_modified_case(original_tree, selected_subtree, most_similar_subtree):
         selected_subtree should be the id of the node selected by the user
         most_similar_subtree is the tree to replace the old sub BT that the user wants to remove
     """
-    
-    # Find the selected composite node id 
-#     for key in selected_subtree:
-#         print("my_key")
-#         print(key)
-#         selected_composite_node = selected_subtree[key]["id"]
-#     print('selected_composite_node:', selected_composite_node)
-    
-    # Remove the selected_composite_node, their children and grandchildren from original_case
-    # for parent_id in selected_subtree.keys():
-    #    modified_tree = search_and_remove(original_case, parent_id)
-    #    print('\nmodified_tree:', modified_tree)
     
     # Remove the selected_composite_node, their children and grandchildren from original_case
     selected_composite_node = selected_subtree[0]['data']['trees'][0]['root']
