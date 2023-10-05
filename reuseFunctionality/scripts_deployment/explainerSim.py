@@ -94,6 +94,3 @@ def critiqueIsInExplainer(critiques, properties_explainer):
             return True
         else:
             return False
-            return True
-        else:
-            return False
