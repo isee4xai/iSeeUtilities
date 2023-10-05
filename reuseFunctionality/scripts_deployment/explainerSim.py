@@ -2,6 +2,7 @@ import pandas as pd
 import json
 import requests
 from applicability import applicabilityExplainer
+from utils import getPropertiesFormat
 
 PROPERTIES_FILE="properties.csv"
 SIMILARITIES_FILE="similarities.csv"
