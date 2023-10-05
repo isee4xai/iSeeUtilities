@@ -15,7 +15,7 @@ def getBTExplainerProperties(original_case):
 def get_all_properties_from_current_bt(original_case, explainer_data): 
     transformed_properties = {}
     
-    nodes = original_case[0]['data']['trees'][0]['nodes']
+    nodes = original_case['data']['trees'][0]['nodes']
     # print('nodes', nodes)   
        
     filtered_instances, instance_properties = {}, {}
