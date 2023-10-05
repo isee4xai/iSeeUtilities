@@ -2,6 +2,9 @@ from utils import PROPERTIES
 from utils import gettingExplainerProperties
 
 def getSimNL(explainer1, explainer2):
+    """
+        explainer1 and explainer 2 are the names of the explainers (string format)
+    """
     explanation = ""
     formatted_df = gettingExplainerProperties()
     explainer1_atts = getRow(formatted_df, explainer1)

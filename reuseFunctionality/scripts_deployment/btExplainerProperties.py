@@ -6,6 +6,7 @@ def getBTExplainerProperties(original_case):
     """
         This function is going to show the explainer properties that are in the current BT
         Petyo has to use this function to click all these properties in the form
+        original_case should be json format (only one element, not a list)
     """
     
     return get_all_properties_from_current_bt(original_case, getPropertiesFormat())
