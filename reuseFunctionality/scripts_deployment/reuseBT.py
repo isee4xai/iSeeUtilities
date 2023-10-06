@@ -5,6 +5,7 @@ import numpy as np
 import edist.sed as sed
 from utils import isExplainer, getSimilarityValueExplainers
 from applicability import applicabilityExplainer
+from explainerSim import getExplainerCritiques
 
 
 intents = {}
@@ -364,21 +365,40 @@ def editDistFunc(q,c,delta):
 
 def checkApplicabilityBT(CASE_ID, ACCESS_TOKEN, my_behaviourTree):
     """
-        We get the my_behaviourTree in graph format, and check if the explainers in that BT 
+        We get the my_behaviourTree in graph format, and check if the explainers in that BT are applicable 
     """
        
     applicability = True
-    
-    for node in my_behaviourTree["nodes"]:
+    my_nodes = my_behaviourTree["nodes"]
+    i = 0
+    while applicability == True and i < len(my_nodes):
+        node = my_nodes[i]
         if node[0] == '/':
             if applicabilityExplainer(CASE_ID,ACCESS_TOKEN, node)[0] == False:
                 applicability = False
-                break
+        i = i + 1
                 
     return applicability
 
+
+def bts_with_critiques(matching_explainers,tree): #json_to_graph_dict):
+    """
+        determine if the BT has explainers applicable and that satisfy the critiques
+    """
+    btCritique = False
+    if 'tree_graph' in tree:
+        graph = tree['tree_graph']
+        if 'nodes' in graph:
+            nodes = graph['nodes']
+            common_explainers = list(set(nodes) & set(matching_explainers))
+            if common_explainers != []:
+                btCritique = True 
+   
+    return btCritique
+
+
 # MAIN
-def reuseFunctionality(original_tree, queryJson, queryTree, queryCase, CASE_ID, ACCESS_TOKEN, k_cases=5, k_similar_cases=3):
+def reuseFunctionality(original_tree, queryJson, queryTree, queryCase, CASE_ID, ACCESS_TOKEN, k_cases=5, k_similar_cases=3, property_critiques={}):
     """
         original_tree -> json with the original tree  
         queryJson -> json with the sub tree to replace
@@ -387,6 +407,15 @@ def reuseFunctionality(original_tree, queryJson, queryTree, queryCase, CASE_ID, 
         CASE_ID, ACCESS_TOKEN -> string
         k_cases -> number of similar cases we need for the retrieval query
         k_similar_cases -> number of similar similar subTrees that we need
+        property_critiques -> {} by default if the user does not include critiques. If they include them, the format should like:
+        
+        example1 = {'explainer': ["/Tabular/LIME"], 'technique': [], 'dataset_type': [], 
+        'explanation_type': ["Statistical Explanation"], 'concurrentness': [], 'scope': [""], 
+        'portability': [], 'target': ['Model'], 'presentations': [], 'computational_complexity': [], 
+        'ai_methods': [], 'ai_tasks': [], 'implementation': ['Any']}
+        
+        when a specific property is empty the value must be [] or [""], for all the properties (all the properties 
+        should be lists thanks to the checkboxes)
         
         k_similar_cases cannot be greater than k_cases. If that happens, we are going to return k_cases similar cases
     """
@@ -400,13 +429,22 @@ def reuseFunctionality(original_tree, queryJson, queryTree, queryCase, CASE_ID, 
     # here we are checking that the similar BT is applicable
     tree_dict = dict()
     for key, value in tree_dict_tmp.items():
+        # We check if the tree is applicable in this use case
         if checkApplicabilityBT(CASE_ID, ACCESS_TOKEN, value['tree_graph']):
-            tree_dict[key] = value
-    #tree_dict = [x for x in tree_dict_tmp if checkApplicabilityBT(CASE_ID, ACCESS_TOKEN, tree_dict_tmp[x]['tree_graph'])]
+            # is the user has included critiques
+            if property_critiques != {}:
+                # we obtain the explainers in the library that satisfies the critiques
+                explainer_critiques = getExplainerCritiques(property_critiques)
+                # here we check if the BT has explainers that satisfy the critiques
+                # we dont need to check if the explainers obtained from the critiques are applicable
+                # because the tree is already applicable (then only the BTs with explainers applicable are retrieved)
+                if bts_with_critiques(explainer_critiques,value) == True:
+                    tree_dict[key] = value
+            else:
+                tree_dict[key] = value
     
     # trick to make the translation properly
     queryJson = [queryJson]
-    # this might change when we know how we are getting the query
     tree_query = translateCasesFromJSONtoGraph(queryJson)['tree_1']['tree_graph']
     
     # for every BT in the case base:
