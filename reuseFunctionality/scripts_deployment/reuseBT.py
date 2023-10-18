@@ -310,6 +310,7 @@ def semantic_delta(x, y):
     #df = getSimilarityTable()
     #print(df["/Images/Anchors"]["/Images/Counterfactuals"])
 
+    composite_nodes = ['Sequence','Priority', 'Supplement', 'Replacement', 'Variant', 'Complement']
     if(x==y):
         ret = 0.
     elif(x!=None and y==None): #inserting
@@ -321,10 +322,10 @@ def semantic_delta(x, y):
     elif(x=='r'or y=='r'):  #we assign an infinite cost when comparing a root node
         #print("root")
         ret = np.inf
-    elif(x in ['Sequence','Priority'] and y in['Sequence','Priority']): #if both nodes are either sequence or priority, assign null cost
+    elif(x in composite_nodes and y in composite_nodes): #if both nodes are either sequence or priority, assign null cost
         #print("sequence and priority")
         ret = 0.
-    elif(x in ['Sequence','Priority'] or y in ['Sequence','Priority']): #if one of the nodes is a sequence or priority, the other won't because of the previous rule
+    elif(x in composite_nodes or y in composite_nodes): #if one of the nodes is a sequence or priority, the other won't because of the previous rule
         #print("sequence or priority")
         ret = np.inf
     elif isExplainer(x) == True and isExplainer(y) == True: # If both nodes are explainers
@@ -338,7 +339,7 @@ def semantic_delta(x, y):
         if typeQuestion(x) == typeQuestion(y):
             ret = 0.75
         else: # if they are not the same type
-            ret = 0.5
+            ret = 0.3
     else: # a node is not well analysed
         print("These nodes cannot be processed: " + x + " and " + y)
         return default_cost
